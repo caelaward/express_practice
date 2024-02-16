@@ -13,26 +13,32 @@ const PORT=process.env.PORT
 const app=express()
 
 // allow anyone to actually use the data .. 
-app.use(cors())
+app.use(cors({
+    // origin will be website localhost for frontend
+    origin:'http://localhost:8080',
+    credentials:true
+}))
 
 // allows us acknowlege json data
 app.use(express.json())
 
 app.use(express.static('views'))
 // dont need path of friends in friends.js .. since we writting this app.use(...)
-app.use('/friends',friendsRouter)
+// app.use('/friends',authenicate,friendsRouter)
 
 app.use (cookieParser())
 
-app.post('/login',(req,res)=>{
-    const{username}=req.body
-    const token = jwt.sign({username:username},process.env.SECRET_KEY,{expiresIn:'1h'})
-    res.cookie('jwt')
-    res.json({
-        // token:token
-        msg:"you have logged in "
-    })
-})
+
+
+// app.post('/login',(req,res)=>{
+//     // const{username}=req.body
+//     // const token = jwt.sign({username:username},process.env.SECRET_KEY,{expiresIn:'1h'})
+//     // res.cookie('jwt',token)
+//     res.json({
+//         // token:token
+//         msg:"you have logged in "
+//     })
+// })
 
 app.post('/users',(req,res)=>{ 
     console.log(req.body);
@@ -54,6 +60,7 @@ const auth =async(req,res,next)=>{
     bcrypt.compare(password,hashedPassword, (err,result)=>{
         if (err) throw err
         if(result===true){
+            
            next()
         }else{
             res.send({msg:'The username or password is incorrect'})
@@ -66,7 +73,21 @@ app.post('/login',auth,(req,res)=>{
         msg:"you have logged in"
     })
 })
+const authenicate = (req,res,next) =>{
+    let {cookie}= req.headers
+    let tokenInHeader=cookie && cookie.split('=')[1]
+    if (tokenInHeader===null)res.sendStatus(401)
+    jwt.verify(tokenInHeader,process.env.SECRET_KEY,
+    (err,user)=>{
+        if(err) return res.sendStatus(403)
+        req.user=user
+        next()
+    } )
+    // console.log(tokenInHeader);
+}
 
+app.use('/friends',authenicate,friendsRouter)
+ 
 // jwt.verify(token,'my_secret_key',(err,user)=>{
 //     // if no acess
 //     if(err)return res.sendStatus(403)

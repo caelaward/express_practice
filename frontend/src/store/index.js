@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 const BASE_URL = "http://localhost:8523";
+axios.defaults.withCredentials = true
 
 export default createStore({
   state: {
@@ -11,9 +12,9 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    setFriends(state, payload) {
+    setFriends(state,data) {
       // payload is the array we pass through
-      state.friends = payload;
+      state.friends =data;
     },
     setAddFriend(state,data){
       state.addfriend=data
@@ -25,7 +26,7 @@ export default createStore({
   actions: {
     async getFriends({ commit }) {
       let { data } = await axios.get(BASE_URL+'/friends');
-      console.log(data);
+      //console.log(data);/
       commit("setFriends", data);
     },
     async addFriend({ commit },newfriend) {
@@ -55,7 +56,7 @@ export default createStore({
       // reloads page 
       alert(data.msg)
       commit('setLogged',true)
-      window.location.reload()
+      // window.location.reload()
     }
 
    

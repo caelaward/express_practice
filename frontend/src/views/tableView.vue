@@ -24,6 +24,7 @@
       <input type="text" placeholder="full name" v-model="name" required >
       <input type="number" placeholder="age" v-model="age" required >
       <button @click='addFriend'>Add</button>
+      <button @click='getFriends'>Friends</button>
     
   
   </div>
@@ -64,7 +65,7 @@ export default {
   
 },
   mounted(){
-    this.getFriends
+    // this.getFriends
     
   }
 }
