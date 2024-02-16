@@ -67,6 +67,14 @@ const addUser = async(username,password)=>{
     INSERT INTO users (username,password)
      VALUES(?,?)`,[username,password])
 }
-console.log(await deleteFriend('laze'));
 
-export {getFriends,getfriend,addFriend,deleteFriend,updateFriend,addUser}
+const checkUser = async(username)=>{
+    const [[{password}]]= await pool.query(`
+    SELECT password From users WHERE username =?`,[username])
+        return password
+    }
+
+// console.log(await checkUser('warren'));
+// console.log(await deleteFriend('laze'));
+
+export {getFriends,getfriend,addFriend,deleteFriend,updateFriend,addUser,checkUser}

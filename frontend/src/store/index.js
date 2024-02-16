@@ -5,7 +5,8 @@ const BASE_URL = "http://localhost:8523";
 export default createStore({
   state: {
     // better way to handle data you dont know what it is
-    friends: null
+    friends: null,
+    loggedIn:false
  
   },
   getters: {},
@@ -16,6 +17,9 @@ export default createStore({
     },
     setAddFriend(state,data){
       state.addfriend=data
+     },
+     setLogged(state,data){
+      state.loggedIn=data
      }
   },
   actions: {
@@ -39,11 +43,23 @@ export default createStore({
       window.location.reload()
     },
     async addUser({ commit },newuser) {
-      await axios.post(BASE_URL+'/users/',newuser);
+      const {data} =await axios.post(BASE_URL+'/users/',newuser);
       // new user is the this.$data that was saved
       // reloads page 
+      alert(data.msg)
+      window.location.reload()
+    },
+    async checkUser({commit},user) {
+      let {data}=await axios.post(BASE_URL+'/login/',user);
+      // new user is the this.$data that was saved
+      // reloads page 
+      alert(data.msg)
+      commit('setLogged',true)
       window.location.reload()
     }
+
+   
+
   },
   modules: {},
 });

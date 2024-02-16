@@ -1,10 +1,11 @@
-import {getFriends,getfriend,addFriend,deleteFriend, updateFriend,addUser} from '../models/database.js'
+import {getFriends,getfriend,addFriend,deleteFriend, updateFriend,addUser,checkUser} from '../models/database.js'
 export default {
     getMany: async(req,res)=>{
         res.send(await getFriends())
         },
     addData: async(req,res)=>{
-        // desturcting with [] works with the postion 
+        // desturcting with [] works with the postion , dependent on order you call your variable
+        // desturcting with {} position doesnt matter, order you call your variable doesnt matter. 
         // creating two variables and assigning data to it 
         const {name,age}=req.body
         const post = await addFriend(name,age)

@@ -5,8 +5,9 @@
     <input type="password" placeholder="password" name="password" required v-model="password">
     <br>
     <br>
-    <button @click="submitData">Register</button>
-    <button >Login</button>
+    <button @click="submitData()">Register</button>
+    {{$store.state.loggedIn}}
+    <button @click="loginUser()">Login</button>
   </div>
 </template>
 
@@ -25,6 +26,9 @@ export default {
                 // console.log(this.password)
                 console.log(this.$data);
                 this.$store.dispatch('addUser',this.$data)
+            },
+            loginUser(){
+               this.$store.dispatch('checkUser',this.$data)  
             }
         }
 }
