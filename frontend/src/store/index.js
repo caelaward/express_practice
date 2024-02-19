@@ -1,7 +1,9 @@
 import { createStore } from "vuex";
 import axios from "axios";
+import router from '@/router';
 const BASE_URL = "http://localhost:8523";
 axios.defaults.withCredentials = true
+
 
 export default createStore({
   state: {
@@ -24,8 +26,8 @@ export default createStore({
      }
   },
   actions: {
-    async getFriends({ commit }) {
-      let { data } = await axios.get(BASE_URL+'/friends');
+    async getFriends({commit}) {
+      let {data} = await axios.get(BASE_URL+'/friends');
       //console.log(data);/
       commit("setFriends", data);
     },
@@ -52,11 +54,23 @@ export default createStore({
     },
     async checkUser({commit},user) {
       let {data}=await axios.post(BASE_URL+'/login/',user);
-      // new user is the this.$data that was saved
-      // reloads page 
+      //  user is the this.$data that was saved
+      $cookies.set('jwt',data.token)
       alert(data.msg)
       commit('setLogged',true)
+      // replace will redirect but not allow you to go back
+      // push keeps browser history of when visiting that page.. redirects you but able to press back
+      router.push('/')
+      // reloads page 
       // window.location.reload()
+    },
+    async logout(context){
+      let cookies=$cookies.keys()
+      console.log(cookies);
+      $cookies.remove('jwt')
+      window.location.reload()
+      // let {data}=await axios.delete(BASE_URL+'/logout')
+      alert("you have logged out")
     }
 
    

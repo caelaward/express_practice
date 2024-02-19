@@ -55,12 +55,22 @@ app.post('/users',(req,res)=>{
 
 // params (req,res,next) tells its middleware
 const auth =async(req,res,next)=>{
+    // getting username and passsword from user
     const {password,username}= req.body
     const hashedPassword=await checkUser(username)
-    bcrypt.compare(password,hashedPassword, (err,result)=>{
+    bcrypt.compare(password,hashedPassword,(err,result)=>{
         if (err) throw err
         if(result===true){
-            
+            const {username} = req.body
+            const token = jwt.sign({username:username}, //json web token do no authenticate but they allow the user access as long as they hav a token
+            process.env.SECRET_KEY,{expiresIn:'1h'}) //secret key is in the .env file
+            // true only backend can access
+            // res.cookie('jwt',token,{httpOnly:false})   
+            res.send({
+                // key name,value of the key
+                token:token,
+                msg:"you have logged in"
+            }) 
            next()
         }else{
             res.send({msg:'The username or password is incorrect'})
@@ -69,10 +79,10 @@ const auth =async(req,res,next)=>{
 }
 // using post because sending data.. cant use get 
 app.post('/login',auth,(req,res)=>{
-    res.send({
-        msg:"you have logged in"
-    })
-})
+//     res.send({
+//         msg:"you have logged in"
+//     })
+ })
 const authenicate = (req,res,next) =>{
     let {cookie}= req.headers
     let tokenInHeader=cookie && cookie.split('=')[1]
@@ -93,6 +103,14 @@ app.use('/friends',authenicate,friendsRouter)
 //     if(err)return res.sendStatus(403)
 //     // access
 //     req.user=usernext()
+// })
+
+//deletes the cookie
+// app.delete('/logout',(req,res)=>{
+//     res.clearCookie('jwt')
+//     res.send({
+//         msg:'Your have logged out'
+//     })
 // })
 
 app.listen(PORT,()=>{ 
