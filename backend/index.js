@@ -62,7 +62,7 @@ const auth =async(req,res,next)=>{
         if (err) throw err
         if(result===true){
             const {username} = req.body
-            const token = jwt.sign({username:username}, //json web token do no authenticate but they allow the user access as long as they hav a token
+            const token = jwt.sign({username:username}, //json web token do no authenticate but they allow the user access as long as they have a token
             process.env.SECRET_KEY,{expiresIn:'1h'}) //secret key is in the .env file
             // true only backend can access
             // res.cookie('jwt',token,{httpOnly:false})   
@@ -96,7 +96,7 @@ const authenicate = (req,res,next) =>{
     // console.log(tokenInHeader);
 }
 
-app.use('/friends',authenicate,friendsRouter)
+app.use('/ ',authenicate ,friendsRouter)
  
 // jwt.verify(token,'my_secret_key',(err,user)=>{
 //     // if no acess
@@ -104,7 +104,7 @@ app.use('/friends',authenicate,friendsRouter)
 //     // access
 //     req.user=usernext()
 // })
-
+  
 //deletes the cookie
 // app.delete('/logout',(req,res)=>{
 //     res.clearCookie('jwt')

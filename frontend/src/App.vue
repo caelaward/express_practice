@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/table">Table</router-link> |
-      <router-link v-if="!$cookies.get('jwt')" to="/login">Login</router-link>
+      <router-link v-if="!$cookies.get('jwt')" to="/login" >Login</router-link>
     </nav>
     <button v-if="$cookies.get('jwt')" @click="logout">Logout</button>
     <router-view/>

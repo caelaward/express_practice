@@ -16,7 +16,7 @@ export default {
      data(){
         // as typing data gets saved here 
             return{
-                username:'',
+                userName:'',
                 password:''
             }
         },

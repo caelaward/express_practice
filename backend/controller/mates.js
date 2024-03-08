@@ -13,7 +13,6 @@ export default {
         res.send(await getFriends())
         // const name = req.body.name ... this way is long and repetitive 
         // const age = req.body.age
-
         },
      getSpecific:async(req,res)=>{
          res.send(await getfriend(+req.params.id))
